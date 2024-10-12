@@ -4,12 +4,13 @@ namespace RecipeManagerApp.Models
 {
     public class Recipe
     {
+        //define the stucture of data stored in the database
         public int RecipeId { get; set; } // Primary key
 
         [Required]
-        public string Title { get; set; }
+        public string Title { get; set; } //name of recipe: mandatory field
 
-        public string Cuisine { get; set; }
+        public string Cuisine { get; set; } 
 
         public string MealType { get; set; }
 
