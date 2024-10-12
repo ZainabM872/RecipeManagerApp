@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RecipeManagerApp.Models
 {
-    public class RecipeContext : DbContext
+    public class RecipeContext : DbContext  //RecipeContext can inherit from DbContext
     {
         public RecipeContext(DbContextOptions<RecipeContext> options)
             : base(options)
