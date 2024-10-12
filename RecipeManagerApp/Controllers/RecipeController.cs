@@ -3,66 +3,67 @@ using Microsoft.EntityFrameworkCore;
 using RecipeManagerApp.Models;
 using System.Threading.Tasks;
 
-namespace RecipeManagerApp.Controllers
+namespace RecipeManagerApp.Controllers //namespace that groups all the controllers together
 {
-    public class RecipeController : Controller
+    public class RecipeController : Controller //defines a controller class named RecipeController that inherits from the base class Controller
     {
-        private readonly RecipeContext _context;
+        private readonly RecipeContext _context; //represents the database context class
 
-        public RecipeController(RecipeContext context)
+        public RecipeController(RecipeContext context) //used to interct with database
         {
-            _context = context;
+            //ASP.NET creates an instance of RecipeContext called context
+            _context = context; //context is assigned to the private field _context
         }
 
-        // GET: Recipe
+        // displays a list of recipes
         public async Task<IActionResult> Index()
         {
-            var recipes = await _context.Recipes.ToListAsync();
-            return View(recipes);
+            var recipes = await _context.Recipes.ToListAsync(); //fetches all recipies from the database asychronously using entity framework
+            return View(recipes); //passes the info to a view to be rendered
         }
 
-        // GET: Recipe/Create
+        // display the form to create a new recipie
         public IActionResult Create()
         {
-            return View();
+            return View(); //returns the create view
         }
 
-        // POST: Recipe/Create
+        // handles form submission and adds new recipie to the database
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,Cuisine,MealType,Ingredients,Instructions")] Recipe recipe)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(recipe);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _context.Add(recipe); //add the recipie to the context and saved to the database
+                await _context.SaveChangesAsync(); //save changes to the databse
+                return RedirectToAction(nameof(Index)); //go to index method 
             }
             return View(recipe);
         }
 
-        // GET: Recipe/Edit/5
+        // GET: displays the form to edit an existing recipe
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return NotFound(); //if the recpie doesnt exist
             }
 
-            var recipe = await _context.Recipes.FindAsync(id);
+            var recipe = await _context.Recipes.FindAsync(id); //asynch fetching usng the id
             if (recipe == null)
             {
                 return NotFound();
             }
-            return View(recipe);
+            return View(recipe); //return the view that allows for editing
         }
 
-        // POST: Recipe/Edit/5
+        // POST: handle edited data submission
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RecipeId,Title,Cuisine,MealType,Ingredients,Instructions")] Recipe recipe)
         {
-            if (id != recipe.RecipeId)
+            if (id != recipe.RecipeId)  //check if the recipie id in the form matches the one being edited
             {
                 return NotFound();
             }
@@ -71,10 +72,10 @@ namespace RecipeManagerApp.Controllers
             {
                 try
                 {
-                    _context.Update(recipe);
+                    _context.Update(recipe); //updated recipe is saved to database
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException) //if >1 user tries to edit the same recipe
                 {
                     if (!RecipeExists(recipe.RecipeId))
                     {
@@ -90,7 +91,7 @@ namespace RecipeManagerApp.Controllers
             return View(recipe);
         }
 
-        // GET: Recipe/Delete/5
+        // GET: display confirmation page for deleting a recipe
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -98,30 +99,33 @@ namespace RecipeManagerApp.Controllers
                 return NotFound();
             }
 
-            var recipe = await _context.Recipes
-                .FirstOrDefaultAsync(m => m.RecipeId == id);
+            var recipe = await _context.Recipes //get the recipe from the database
+                .FirstOrDefaultAsync(m => m.RecipeId == id); //fetches the first element that has a recipie id that matches id
             if (recipe == null)
             {
                 return NotFound();
             }
 
-            return View(recipe);
+            return View(recipe); //display the details
         }
 
-        // POST: Recipe/Delete/5
+        // POST: delete the recipe
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var recipe = await _context.Recipes.FindAsync(id);
-            _context.Recipes.Remove(recipe);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            _context.Recipes.Remove(recipe); //remove the specified recipe
+            await _context.SaveChangesAsync(); //save the changes to the database
+            return RedirectToAction(nameof(Index)); //redirect back to list of recipies
         }
 
+        //helper method: checks if a recpie exists using its id
         private bool RecipeExists(int id)
         {
-            return _context.Recipes.Any(e => e.RecipeId == id);
+            return _context.Recipes.Any(e => e.RecipeId == id); //checks if any records in the Recipies table have a recipieid that matches id
+            //Look for any recipe (e) where RecipeId equals the provided id.
+
         }
     }
 }
