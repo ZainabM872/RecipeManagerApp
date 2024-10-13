@@ -1,0 +1,19 @@
+@model RecipeManagerApp.Models.Recipe
+
+<h2>Delete Recipe</h2>
+
+<h3>Are you sure you want to delete this recipe?</h3> <!--confirmation message-->
+
+<div>
+    <h4>@Model.Title</h4>
+    <p><strong>Cuisine:</strong> @Model.Cuisine</p> <!--get the info for the recipe to delete-->
+    <p><strong>Meal Type:</strong> @Model.MealType</p>
+    <p><strong>Ingredients:</strong> @Model.Ingredients</p>
+    <p><strong>Instructions:</strong> @Model.Instructions</p>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="RecipeId" />
+    <button type="submit" class="btn btn-danger">Delete</button> <!--delete button-->
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a> <!--redirected to the list of all recipes-->
+</form>
