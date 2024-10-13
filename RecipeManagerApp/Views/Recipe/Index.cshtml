@@ -1,0 +1,30 @@
+@model IEnumerable<RecipeManagerApp.Models.Recipe>
+
+<h2>Recipe List</h2>
+
+<table class="table"> <!-- create a table-->
+    <thead>
+        <tr> <!-- give the columsn some headings -->
+            <th>Title</th>
+            <th>Cuisine</th>
+            <th>Meal Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var recipe in Model) 
+        {<!-- iterates over the recipe object in the model-->
+            <tr>
+                <td>@recipe.Title</td>
+                <td>@recipe.Cuisine</td>
+                <td>@recipe.MealType</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@recipe.RecipeId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@recipe.RecipeId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create">Add New Recipe</a>
