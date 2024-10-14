@@ -227,3 +227,4 @@
 /Users/macbook/Documents/newProject/RecipeManagerApp/obj/Debug/net9.0/RecipeManagerApp.pdb
 /Users/macbook/Documents/newProject/RecipeManagerApp/obj/Debug/net9.0/RecipeManagerApp.genruntimeconfig.cache
 /Users/macbook/Documents/newProject/RecipeManagerApp/obj/Debug/net9.0/ref/RecipeManagerApp.dll
+/Users/macbook/Documents/newProject/RecipeManagerApp/bin/Debug/net9.0/System.ClientModel.dll

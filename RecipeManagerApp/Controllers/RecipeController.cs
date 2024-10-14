@@ -115,9 +115,12 @@ namespace RecipeManagerApp.Controllers //namespace that groups all the controlle
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var recipe = await _context.Recipes.FindAsync(id);
-            _context.Recipes.Remove(recipe); //remove the specified recipe
-            await _context.SaveChangesAsync(); //save the changes to the database
-            return RedirectToAction(nameof(Index)); //redirect back to list of recipies
+            if (recipe != null) // Ensure recipe is not null
+            {
+                _context.Recipes.Remove(recipe);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         //helper method: checks if a recpie exists using its id

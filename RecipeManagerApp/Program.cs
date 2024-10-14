@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.DataProtection;
 using RecipeManagerApp.Models; // Ensure this matches your namespace
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,22 +11,33 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<RecipeContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("RecipeContext")));
 
+// Configure Data Protection for handling encryption in production
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(@"./keys")) // Change path as needed for key persistence
+    .SetApplicationName("RecipeManagerApp");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+    app.UseExceptionHandler("/Home/Error"); // Custom error page
+    app.UseHsts(); // Use HTTP Strict Transport Security
 }
 
-app.UseHttpsRedirection();
-app.UseRouting();
+app.UseHttpsRedirection(); // Redirect HTTP requests to HTTPS
+app.UseStaticFiles(); // Serve static files (e.g., CSS, JS, images)
 
-app.UseAuthorization();
+app.UseRouting(); // Enable routing for controllers
 
+app.UseAuthorization(); // Enable authorization for protected routes
+
+// Configure endpoint routing
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+// Optionally add a fallback route or endpoint for specific pages
+// app.MapFallbackToPage("/Index");
+
+app.Run(); // Run the application
